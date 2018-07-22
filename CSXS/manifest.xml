@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- 1) -->
+<ExtensionManifest ExtensionBundleId="com.mightysvg" ExtensionBundleVersion="1.0.0" Version="7.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <ExtensionList>
+    <!-- 2) -->
+    <Extension Id="com.mightysvg.panel" Version="1.0.0" />
+  </ExtensionList>
+  <ExecutionEnvironment>
+    <HostList>
+      <!-- 3) -->
+      <Host Name="ILST" Version="18" />
+    </HostList>
+    <LocaleList>
+      <Locale Code="All" />
+    </LocaleList>
+    <RequiredRuntimeList>
+      <RequiredRuntime Name="CSXS" Version="7.0" />
+    </RequiredRuntimeList>
+  </ExecutionEnvironment>
+  <DispatchInfoList>
+    <!-- 2) -->
+    <Extension Id="com.mightysvg.panel">
+      <DispatchInfo>
+        <Resources>
+          <!-- 4) -->
+          <MainPath>./client/index.html</MainPath>
+          <!-- 5) -->
+          <!-- <ScriptPath>./host/index.jsx</ScriptPath> -->
+          <CEFCommandLine />
+        </Resources>
+        <Lifecycle>
+          <AutoVisible>true</AutoVisible>
+        </Lifecycle>
+        <UI>
+          <Type>Panel</Type>
+          <!-- 6) -->
+          <Menu>mightySVG</Menu>
+          <Geometry>
+            <Size>
+              <!-- 7) -->
+              <Height>100</Height>
+              <Width>104</Width>
+            </Size>
+            <MaxSize>
+              <Height>150</Height>
+              <Width>150</Width>
+            </MaxSize>
+            <MinSize>
+              <Height>150</Height>
+              <Width>60</Width>
+            </MinSize>
+          </Geometry>
+          <Icons />
+        </UI>
+      </DispatchInfo>
+    </Extension>
+  </DispatchInfoList>
+</ExtensionManifest>

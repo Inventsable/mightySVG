@@ -1,0 +1,30 @@
+/* none */
+:root {
+  --prevWidth: 50px;
+  --prevHeight: 50px;
+}
+
+.adobe-layer-check {
+  /* border: 2px solid black; */
+}
+
+.previewContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid rgba(255,255,255,.1);
+  padding: 5px 0px;
+}
+
+
+#preview {
+  width: var(--prevWidth);
+  height: var(--prevHeight);
+  /* border: 2px solid green; */
+  margin: calc(var(--prevWidth) / 10))
+}
+
+#preview svg {
+  width: var(--prevWidth);
+  height: var(--prevHeight);
+}
