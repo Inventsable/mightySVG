@@ -1,5 +1,5 @@
 ## mightySVG
 
-Deploying external SVG with companion stylesheet without losing editability in Illustrator:
+![edit](https://thumbs.gfycat.com/ExemplaryGenuineJohndory-size_restricted.gif)
 
-![edit](https://thumbs.gfycat.com/UnripeFragrantAsianconstablebutterfly-size_restricted.gif)
+![drawing](https://thumbs.gfycat.com/PreciousWhirlwindHyrax-size_restricted.gif)

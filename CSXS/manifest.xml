@@ -38,11 +38,11 @@
           <Geometry>
             <Size>
               <!-- 7) -->
-              <Height>100</Height>
+              <Height>150</Height>
               <Width>104</Width>
             </Size>
             <MaxSize>
-              <Height>150</Height>
+              <Height>250</Height>
               <Width>150</Width>
             </MaxSize>
             <MinSize>

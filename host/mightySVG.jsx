@@ -8,10 +8,22 @@ var activeAB = thisDoc.artboards.getActiveArtboardIndex();
 var lastAB = 0;
 var lastABOffset, isOrigin, thisAB, absAB, relAB;
 
+function getName(){
+  return app.documents[0].name;
+}
+
 function setDirectory(path){
   setPath = path;
   var setFolder = new Folder(path);
   setFolder.create();
+}
+
+function verifyFile(name){
+  var newFile = File(setPath + "/" + name + ".svg");
+  try {newFile.open('r');
+    } catch(e){alert(e)};
+  var contents = newFile.read();
+  return contents;
 }
 
 function clearSet(){
@@ -42,14 +54,15 @@ function exportSVG(name){
   var thisFile = new File(newName);
   var type = ExportType.WOSVG;
   doc.exportFile(thisFile, type, setOptionsForSVGExport());
+  // JSXEvent(verifyFile(name), "console");
+  // console.log(verifyFile(name));
+  JSXEvent(name, "com.mightySVG.result");
 }
 
 
+
 function exportDocument(name){
-  // var name = app.documents[0].name;
-  dupeAndHideOriginal();
   exportSVG(name);
-  reshowOriginal();
 }
 
 function dupeAndHideOriginal(){
@@ -78,6 +91,11 @@ function scanCurrentArtboard(){
   lastAB = activeAB;
 }
 
+function artboardName(){
+  thisAB = thisDoc.artboards.getActiveArtboardIndex();
+  return thisDoc.artboards[thisAB].name;
+}
+
 // alert(updateArtboardDimensions(0))
 
 function updateArtboardDimensions(index){
@@ -104,11 +122,6 @@ function updateArtboardDimensions(index){
   absAB[1] = (absAB[1] * (-1));
   return rect = [ absAB[0], absAB[1], absAB[2], absAB[3], w, h, thisAB ];
 }
-
-
-
-
-
 
 
 function roundTo(n, digits) {

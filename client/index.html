@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <link href="./myTstack/reset.css" type="text/css" rel="stylesheet">
     <link href="./myTstack/anima.css" type="text/css" rel="stylesheet">
+    <!-- <link href="./myTstack/adobeFontStyle.css" type="text/css" rel="stylesheet"> -->
     <link href="./myTstack/adobeStyle.css" type="text/css" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css">
@@ -17,25 +18,33 @@
   <body>
 
   <div class="content">
-
     <div class="adobe-toolbar">
       <div id="push" class="adobe adobe-btn">
-        <span class="fa fa-bolt fa-lg"></span>
+        <span class="fa fa-file fa-lg"></span>
       </div>
+      <div id="SVG" class="adobe adobe-btn-switch adobe-alt">
+        <span class="fa fa-image fa-lg"></span>
+      </div>
+      <div id="CSS" class="adobe adobe-btn-switch adobe-alt">
+        <span class="fa fa-code fa-lg"></span>
+      </div>
+      <div id="playDOM" class="adobe adobe-btn-disabled adobe-alt">
+        <span class="fa fa-reply fa-lg"></span>
+      </div>
+
       <div class="adobe adobe-layer-check"></div>
-      <!-- <div class="adobe adobe-btn">
-      </div> -->
-      <!-- <div class="adobe adobe-btn-switch">
-        <span class="fa fa-cut fa-lg"></span>
-      </div>
-      <div class="adobe adobe-btn-switch">
-        <span class="fa fa-user-secret fa-lg"></span>
-      </div> -->
       <div class="adobe-toolbar-divider"></div>
     </div>
     <div class="previewContainer">
-      <div id="preview">
-      </div>
+      <div id="preview"></div>
+    </div>
+    <div class="adobe-toolbar">
+      <div id="autoInputs" class="adobe-controlGroup"></div>
+    </div>
+
+    <div id="convertVariables" class="adobe adobe-checkboxGroup">
+      <span class="adobe-icon-checkBoxOff"></span>
+      <span class="adobe-checkbox-suffix">Convert to variables</span>
     </div>
   </div>
 

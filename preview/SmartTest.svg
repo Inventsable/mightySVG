@@ -1,0 +1,5 @@
+<svg id="TestLayer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.14 23.14"><title>SmartTest</title>
+  <polyline id="cross2" class="cls-1" points="11.57 22.64 6.74 2.49 11.57 0.5"/>
+  <line id="cross1" class="cls-1" x1="22.64" y1="11.57" x2="0.5" y2="11.57"/>
+  <circle id="orb" class="cls-2" cx="11.57" cy="11.57" r="7.62"/>
+</svg>
