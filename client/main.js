@@ -13,10 +13,7 @@ loadJSX(`${appName}.jsx`);
 loadJSX(`mightySVG.jsx`);
 console.log(`Loading for ${appName}`);
 console.log(appUI);
-
-function changeCSSVar(prop, data){
-  document.documentElement.style.setProperty('--' + prop, data);
-}
+scanningArtboard(true);
 
 var preview = document.getElementById('preview');
 var autoInputs = document.getElementById('autoInputs');
@@ -30,6 +27,7 @@ var mighty = {
   toggle : {
     SVG: false,
     display: 'SVG',
+    overWrite: false,
   },
   SVG: 'start',
   CSS: 'start',
@@ -37,7 +35,7 @@ var mighty = {
     convertVariables: false,
   },
   snatch : function() {
-    playWrite();
+    // playWrite();
   },
   AB : {
     rect: {
@@ -79,128 +77,62 @@ var mighty = {
     location.reload();
   },
 };
-
 mighty.load();
 
 function readLastPreview(){
-  // docName();
-  // mighty.toggle.display = "SVG";
-  var result = window.cep.fs.readFile(mighty.previewPath + "/" + appUI.data.name);
-  if (0 == result.err) {
-    newPreview(result.data, name);
-  } else {
-    console.log(`Error ${result.err}`);
-  }
+  csInterface.evalScript(`setDirectory('${mighty.previewPath}')`);
+  // load last file if exists
 }
 
-csInterface.evalScript(`setDirectory('${mighty.previewPath}')`)
-
-function playWrite(){
-  try {
-    var result = window.cep.fs.readFile(sysPath + '/../../Playwrite/host/scribe.jsx');
-    if (0 == result.err) {
-      if (mighty.toggle.display == 'CSS') {
-        var playwriteCSS = window.cep.fs.writeFile(mighty.stylePath, result.data);
-        if (0 == playwriteCSS.err) {
-          console.log(result.data);
-        } else {
-          console.log("Something went wrong for " + mighty.toggle.display);
-        }
-      } else if (mighty.toggle.display == 'SVG') {
-        var playwriteSVG = window.cep.fs.writeFile(mighty.previewPath + "/" + mighty.name + ".svg", result.data);
-        if (0 == playwriteCSS.err) {
-          console.log(result.data);
-        } else {
-          console.log("Something went wrong for " + mighty.toggle.display);
-        }
-      }
-      console.log(result.data);
-    } else {
-      console.log(`Error ${result.err}`);
-    }
-  } catch(e){console.log("Disconnected from PlayWrite");}
+function injectStylesheet(data){
+  if (inString(data, '<defs>'))
+    console.log(`This doesn't need injecting.`);
+    // return data;
+  var wrapper = '<defs>\r\t<style>\rneedle</style>\r</defs>';
+  var style = strReplace(wrapper, 'needle', mighty.CSS);
+  console.log(style);
+  return style;
 }
 
-scanningArtboard(true);
-function scanningArtboard(state) {
-  var res, here;
-  var parm = ["x1", "y1", "x2", "y2", "w", "h", "index"];
-  if (state) {
-		timerAB = setInterval(function(){csInterface.evalScript('scanCurrentArtboard();', function(a){
-      if (a == mighty.AB.data) return;
-      if (a !== mighty.AB.data) {
-        csInterface.evalScript('artboardName()', function(n){
-          mighty.AB.name = n;
-          console.log('Artboard changed to ' + mighty.AB.name);
-        })
-        csInterface.evalScript(`updateArtboardDimensions(${a});`, function(aa){
-          var res = aa.split(',');
-          for (var m = 0; m < res.length; m++) {
-            here = parm[m];
-            mighty.AB.rect[here] = parseInt(res[m]);
-          };
-          console.log(mighty.AB);
-        });
-        setPreviewBounds(mighty.AB.rect.w, mighty.AB.h);
-      }
-      mighty.AB.data = a;
-    })}, 50);
-    console.log("Scanning artboard on");
-	} else {
-		clearInterval(timerAB);
-		console.log("Scanning artboard off");
-	}
-}
-
-
-function setPreviewBounds(w, h) {
-  var ratio = w/h;
-  // console.log(appUI.data.panelWidth + "," + ratio);
-  var width = (appUI.data.panelWidth * .50);
-  // var width = w;
-  var height = (width / ratio);
-  document.documentElement.style.setProperty('--prevWidth', width + "px");
-  document.documentElement.style.setProperty('--prevHeight', height + "px");
-  console.log("w:" + width + ", h:" + height);
-}
-
-
-
-function docName(){
-  csInterface.evalScript(`getName()`, function(name){
-    console.log(name);
-    newName = name.split(".");
-    mighty.name = newName[0];
-    newName = newName[0];
-    return mighty.name;
-  })
-}
-
+// Buttons
 var btnExport = document.getElementById('push');
 btnExport.addEventListener('click', function(e){
   if (!mighty.toggle.SVG) {
     mighty.toggle.SVG = !mighty.toggle.SVG;
     showAltControls(mighty.toggle.SVG);
   }
-  console.log(mighty.toggle.SVG);
   csInterface.evalScript(`getName()`, function(m){
-    console.log(m);
     newName = m.split(".");
     name = newName[0];
-    // newName = newName[0];
-    console.log("this is " + name);
-    csInterface.evalScript(`exportDocument('${name}')`, function(e){
-  })
-    // var thisFile = mighty.previewPath + "/" + name + ".svg";
-    // sleep(1000);
-    // var result = window.cep.fs.readFile(thisFile);
-    // if (0 == result.err) {
-    //   newPreview(result.data, name);
-    // } else {
-    //   console.log(`Error ${result.err}`);
-    // }
+    csInterface.evalScript(`exportDocument('${name}')`);
   })
 }, false)
+
+
+svgBtn.addEventListener('click', function(e){
+  if (mighty.toggle.SVG) {
+    mighty.toggle.display = 'SVG';
+    mighty.SVGprev = mighty.SVG;
+    displayToPlayWrite(mighty.toggle.display);
+  }
+}, false)
+
+cssBtn.addEventListener('click', function(e){
+  if (mighty.toggle.SVG) {
+    mighty.toggle.display = 'CSS';
+    displayToPlayWrite(mighty.toggle.display);
+  }
+}, false)
+
+
+playBtn.addEventListener('click', function(e){
+  if (mighty.toggle.SVG) {
+    mighty.toggle.overWrite = true;
+    dispatchEvent('com.playwrite.call', 'Requesting code')
+    console.log("Code snatched from PlayWrite:");
+  }
+})
+//
 
 function showAltControls(state){
   if (state){
@@ -210,24 +142,49 @@ function showAltControls(state){
   }
 }
 
-function newPreview(svg, name){
-  var prefix = svg.split("<style>")
-  mighty.CSS = prefix[1].split("</style>");
-  mighty.CSS = mighty.CSS[0].substr(2, mighty.CSS[0].length);
-  var suffix = svg.split("</style>");
-  prefix = prefix[0];
-  suffix = suffix[1];
-  prefix = prefix.replace("<defs>", '')
-  suffix = suffix.replace("</defs>", '')
-  prefix = prefix.trim();
-  suffix = suffix.trim();
-  mighty.SVG = prefix + suffix;
-  mighty.SVG = mighty.SVG.replace('<title>', '\r<title>')
-  // console.log(mighty.SVG);
-  dispatchEvent('com.playwrite.rewrite', mighty.SVG)
-  dispatchEvent('com.playwrite.console', 'Generating SVG...')
-  writeNewStyleSheet(mighty.CSS, name);
+function parseSVG(svg){
+  try {
+    var prefix = svg.split("<style>")
+    mighty.CSS = prefix[1].split("</style>");
+    mighty.CSS = mighty.CSS[0].substr(2, mighty.CSS[0].length);
+    var suffix = svg.split("</style>");
+    prefix = prefix[0];
+    suffix = suffix[1];
+    prefix = prefix.replace("<defs>", '')
+    suffix = suffix.replace("</defs>", '')
+    prefix = prefix.trim();
+    suffix = suffix.trim();
+    mighty.SVG = prefix + suffix;
+    mighty.SVG = mighty.SVG.replace('<title>', '\r<title>')
+    return mighty.SVG;
+  } catch(e){
+    console.log("Parsing error");
+  }
 }
+
+function toPlayWrite(code, title) {
+  dispatchEvent('com.playwrite.rewrite', code)
+  dispatchEvent('com.playwrite.console', title)
+}
+
+function newPreview(svg, name){
+  mighty.SVGFull = svg;
+  toPlayWrite(parseSVG(svg), 'Generating SVG...')
+  writeNewStyleSheet(mighty.CSS, name);
+  clearPlayWriteConsole();
+}
+
+function updatePreview(file){
+  clearPreview();
+  // https://stackoverflow.com/a/14070928
+  xhr = new XMLHttpRequest();
+  xhr.open("GET","../preview/" + file + "full.svg",false);
+  xhr.overrideMimeType("image/svg+xml");
+  xhr.send("");
+  document.getElementById('preview')
+  .appendChild(xhr.responseXML.documentElement);
+}
+
 
 function writeNewStyleSheet(sheet, name) {
   var thisFile = mighty.previewPath + "/tempStyle.css";
@@ -247,6 +204,14 @@ function clearPreview(){
   while(preview.firstChild){
       preview.removeChild(preview.firstChild);
   }
+}
+
+function rebuildPreview(){
+  readStyle();
+  readSVG();
+  newPreview(readFile(mighty.SVGPath))
+  console.log(mighty.name);
+  // updatePreview(mighty.name);
 }
 
 function countClassesFromStyleSheet(file){
@@ -362,27 +327,14 @@ function toggleCheckbox(state, target){
   }
 }
 
-function dispatchEvent(name, data) {
-  var event = new CSEvent(name, 'APPLICATION');
-  event.data = data;
-  csInterface.dispatchEvent(event);
-}
-
-
 function readStyle(){
-  var result = window.cep.fs.readFile(mighty.stylePath)
-  if (0 == result.err) {
-    mighty.CSSprev = result.data;
-  }
+    mighty.CSSprev = readFile(mighty.stylePath);
 }
 
 function readSVG(){
   mighty.SVGPath = mighty.previewPath + "/" + mighty.name + ".svg";
-  console.log(mighty.SVGPath);
-  var result = window.cep.fs.readFile(mighty.SVGPath)
-  if (0 == result.err) {
-    mighty.SVGprev = result.data;
-  }
+  mighty.SVGFullPath = mighty.previewPath + "/" + mighty.name + "full.svg";
+  mighty.SVGprev = readFile(mighty.SVGPath);
 }
 
 function replaceClass(hit){
@@ -391,8 +343,8 @@ function replaceClass(hit){
       var number = hit.slice(-1);
       var target = document.getElementById(hit);
       var file = result.data;
-      mighty.CSSprev = replaceAll(file, target.name, target.value);
-      mighty.SVGprev = replaceAll(mighty.SVG, target.name, target.value);
+      mighty.CSSprev = strReplace(file, target.name, target.value);
+      mighty.SVGprev = strReplace(mighty.SVG, target.name, target.value);
       target.name = target.value;
       mighty.classList[number] = target.value;
       var rewriteCSS = window.cep.fs.writeFile(mighty.stylePath, mighty.CSSprev);
@@ -412,18 +364,14 @@ function replaceClass(hit){
   console.log(mighty.classList);
 }
 
-function replaceAll(s, f, r){
-   return s.split(f).join(r);
- }
-
  function replaceAllClasses(){
    var lastCSS = window.cep.fs.readFile(mighty.stylePath);
    var lastSVG = window.cep.fs.readFile(mighty.SVGPath);
    if (0 == lastCSS.err) {
      for (var i = 1; i <= mighty.classList.length; i++) {
        try {
-         mighty.CSS = replaceAll(lastCSS.data, 'cls-' + i, mighty.classList[i])
-         mighty.SVG = replaceAll(mighty.SVGprev, 'cls-' + i, mighty.classList[i])
+         mighty.CSS = strReplace(lastCSS.data, 'cls-' + i, mighty.classList[i])
+         mighty.SVG = strReplace(mighty.SVGprev, 'cls-' + i, mighty.classList[i])
        } catch(e) {
          console.log(e);
        }
@@ -444,51 +392,25 @@ function replaceAll(s, f, r){
    }
  }
 
-// function setSwitch(which, other, to){
-//   var target = document.getElementById(which);
-//   var sibling = document.getElementById(other);
-//   target.classList.remove('adobe-btn-switch-on', 'adobe-btn-switch-off');
-//   sibling.classList.remove('adobe-btn-switch-on', 'adobe-btn-switch-off');
-//   if (to) {
-//     target.classList.add('adobe-btn-switch-on');
-//     sibling.classList.add('adobe-btn-switch-off');
-//   } else {
-//     target.classList.add('adobe-btn-switch-off');
-//     sibling.classList.add('adobe-btn-switch-on');
-//   }
-// }
+function clearPlayWriteConsole(){
+  setTimeout(function(){
+    dispatchEvent('com.playwrite.console', '...')
+  }, 1250)
+}
 
 function displayToPlayWrite(display){
   if (display == 'CSS') {
     dispatchEvent('com.playwrite.rewrite', mighty.CSSprev)
     dispatchEvent('com.playwrite.console', 'Rewriting mighty.CSS...')
   } else if (display == 'SVG') {
+    if (inString(mighty.SVGprev, '<defs>')){
+      parseSVG(mighty.SVGprev);
+    }
     dispatchEvent('com.playwrite.rewrite', mighty.SVGprev)
     dispatchEvent('com.playwrite.console', 'Rewriting SVG...')
   }
+  clearPlayWriteConsole();
 }
-
-svgBtn.addEventListener('click', function(e){
-  if (mighty.toggle.SVG) {
-    mighty.toggle.display = 'SVG';
-    displayToPlayWrite(mighty.toggle.display);
-  }
-}, false)
-
-cssBtn.addEventListener('click', function(e){
-  if (mighty.toggle.SVG) {
-    mighty.toggle.display = 'CSS';
-    displayToPlayWrite(mighty.toggle.display);
-  }
-}, false)
-
-playBtn.addEventListener('click', function(e){
-  if (mighty.toggle.SVG) {
-    playWrite();
-    console.log("Writing from PlayWrite");
-  }
-})
-
 
 function clearLastInputs(){
   while(autoInputs.firstChild){
@@ -496,15 +418,58 @@ function clearLastInputs(){
   }
 }
 
-function updatePreview(file){
-  clearPreview();
-  // https://stackoverflow.com/a/14070928
-  xhr = new XMLHttpRequest();
-  xhr.open("GET","../preview/" + file + ".svg",false);
-  xhr.overrideMimeType("image/svg+xml");
-  xhr.send("");
-  document.getElementById('preview')
-  .appendChild(xhr.responseXML.documentElement);
+function setPreviewBounds(w, h) {
+  var ratio = w/h;
+  // console.log(appUI.data.panelWidth + "," + ratio);
+  var width = (appUI.data.panelWidth * .50);
+  // var width = w;
+  var height = (width / ratio);
+  document.documentElement.style.setProperty('--prevWidth', width + "px");
+  document.documentElement.style.setProperty('--prevHeight', height + "px");
+  console.log("w:" + width + ", h:" + height);
+}
+
+
+
+function docName(){
+  csInterface.evalScript(`getName()`, function(name){
+    console.log(name);
+    newName = name.split(".");
+    mighty.name = newName[0];
+    newName = newName[0];
+    return mighty.name;
+  })
+}
+
+
+function scanningArtboard(state) {
+  var res, here;
+  var parm = ["x1", "y1", "x2", "y2", "w", "h", "index"];
+  if (state) {
+		timerAB = setInterval(function(){csInterface.evalScript('scanCurrentArtboard();', function(a){
+      if (a == mighty.AB.data) return;
+      if (a !== mighty.AB.data) {
+        csInterface.evalScript('artboardName()', function(n){
+          mighty.AB.name = n;
+          console.log('Artboard changed to ' + mighty.AB.name);
+        })
+        csInterface.evalScript(`updateArtboardDimensions(${a});`, function(aa){
+          var res = aa.split(',');
+          for (var m = 0; m < res.length; m++) {
+            here = parm[m];
+            mighty.AB.rect[here] = parseInt(res[m]);
+          };
+          console.log(mighty.AB);
+        });
+        setPreviewBounds(mighty.AB.rect.w, mighty.AB.h);
+      }
+      mighty.AB.data = a;
+    })}, 50);
+    console.log("Scanning artboard on");
+	} else {
+		clearInterval(timerAB);
+		console.log("Scanning artboard off");
+	}
 }
 
 function sleep(ms) {

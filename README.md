@@ -1,6 +1,6 @@
 ## mightySVG
 
-Using `dispatchEvent(data, 'com.playwrite.rewrite')` to show resulting code in PlayWrite:
+Using `dispatchEvent(data, 'com.playwrite.rewrite')` to show with PlayWrite:
 
 ![edit](https://thumbs.gfycat.com/ExemplaryGenuineJohndory-size_restricted.gif)
 
