@@ -1,0 +1,1 @@
+Or (fullPath, content) parameters

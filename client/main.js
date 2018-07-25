@@ -1,7 +1,7 @@
 var csInterface = new CSInterface();
 var appSkin = csInterface.hostEnvironment.appSkinInfo;
-var sysPath = csInterface.getSystemPath(SystemPath.EXTENSION);
-var logPath = sysPath + "/log/";
+// var sysPath = csInterface.getSystemPath(SystemPath.EXTENSION);
+// var logPath = sysPath + "/log/";
 var hostPath = sysPath + "/host/";
 var previewPath = sysPath + "/preview/";
 var appName = csInterface.hostEnvironment.appName;

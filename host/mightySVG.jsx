@@ -18,6 +18,25 @@ function setDirectory(path){
   setFolder.create();
 }
 
+
+// deleteFolder('C:/Users/PortablePawnShop/AppData/Roaming/Adobe/CEP/extensions/mightySVG./log/temp')
+
+// function deleteFolder(path){
+//   var thisFolder = Folder(path);
+//   try {
+//     var theseFiles = thisFolder.getFiles();
+//   } catch(a){thisFolder.remove()}
+//   for (var i = 0; i < theseFiles.length; i++) {
+//     var thisFile = File(path + '/' + theseFiles[i]);
+//     try {
+//       thisFile.remove();
+//     } catch(e){alert(e)}
+//   }
+//   try {
+//     thisFolder.remove();
+//   } catch(a){alert(a)};
+// }
+
 function verifyFile(name){
   var newFile = File(setPath + "/" + name + ".svg");
   try {newFile.open('r');

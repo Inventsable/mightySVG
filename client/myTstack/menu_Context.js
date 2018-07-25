@@ -3,6 +3,7 @@ var menu_ContextFlip = false;
 
 var menu_ContextXML = '<Menu> \
    <MenuItem Id="refresh" Label="Refresh panel" Enabled="true" Checked="false"/> \
+   <MenuItem Id="clear" Label="Clear /log/" Enabled="true" Checked="false"/> \
    <MenuItem Id="console" Label="To Console" > \
      <MenuItem Id="check" Label="Checkbox" Enabled="true" Checkable="true" Checked="false"/> \
      <MenuItem Id="msg" Label="Message" Enabled="true" Checkable="false" Checked="false"/> \
@@ -15,6 +16,8 @@ csInterface.setContextMenu(menu_ContextXML, setContextMenuCallback);
 function setContextMenuCallback(event) {
   if (event == "refresh") {
     location.reload();
+  } else if (event == "clear") {
+    clearTests();
   } else if (event === 'check') {
     menu_ContextFlip = !menu_ContextFlip;
     console.log(`${event} is ${menu_ContextFlip}`);

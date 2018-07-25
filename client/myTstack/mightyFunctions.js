@@ -1,41 +1,23 @@
 var csInterface = new CSInterface();
 
-
-//               (path, name)
-//               (path)
-function readFile(args){
-  if (arguments.length > 1) {
-    result = window.cep.fs.readFile(arguments[0], arguments[1])
-  } else {
-    result = window.cep.fs.readFile(arguments[0])
-  }
-  if (0 == result.err) {
-    return result.data;
-  }
+function dispatchEvent(name, data) {
+  var event = new CSEvent(name, 'APPLICATION');
+  event.data = data;
+  csInterface.dispatchEvent(event);
 }
 
-//                (path, name, data)
-//                (path, data)
-function writeFile(args) {
-  var result;
-  if (arguments.length > 2) {
-    result = window.cep.fs.writeFile(arguments[0] + "/" + arguments[1], arguments[2]);
-  } else if (arguments.length > 1) {
-    result = window.cep.fs.writeFile(arguments[0], arguments[1])
-  } else {
-    console.log("Need more parameters for writeFile(name, data)");
-    return
-  }
-  if (0 == result.err) {
-    return result.data;
-  }
+function chainEvent(data, name) {
+  csInterface.evalScript(`JSXEvent('${data}', '${name}')`)
 }
 
-function copyFile(args){
-  try {
-    writeFile(arguments[0], readFile(arguments[1]));
-  } catch(e){return false}
-  return true;
+function changeCSSVar(prop, data){
+  document.documentElement.style.setProperty('--' + prop, data);
+}
+
+function deleteChildren(parent){
+  while(parent.firstChild){
+      parent.removeChild(parent.firstChild);
+  }
 }
 
 function trimL(str, num) {
@@ -62,6 +44,25 @@ function inString(haystack, needle){
   }
 }
 
+function containsMultiple(haystack, needle){
+  if (haystack.split(needle).length > 2) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// function hasFileExtension(str){
+//   console.log(str.lastIndexOf('.'));
+//   if (str.lastIndexOf('.') > 4) {
+//     return false;
+//   } else {
+//     return true;
+//   }
+//
+// }
+
+
 function isBetween(a, b, c) {
   if ((a > b) && (a < c)) {
     return true;
@@ -69,6 +70,16 @@ function isBetween(a, b, c) {
     return false;
   }
 }
+
+
+var contains = function (haystack, needle) {
+    return !!~haystack.indexOf(needle);
+};
+// // can be used like so now:
+// if (contains(items, 3452)) {
+//     // do something else...
+// }
+
 
 // 1 param: automatic div tag, param is either id or classes (no solo class)
 // createChild(preview, ['adobe adobe-btn']);
@@ -126,26 +137,6 @@ function theseAreClasses(target){
     return true;
   } else {
     return false;
-  }
-}
-
-function dispatchEvent(name, data) {
-  var event = new CSEvent(name, 'APPLICATION');
-  event.data = data;
-  csInterface.dispatchEvent(event);
-}
-
-function chainEvent(data, name) {
-  csInterface.evalScript(`JSXEvent('${data}', '${name}')`)
-}
-
-function changeCSSVar(prop, data){
-  document.documentElement.style.setProperty('--' + prop, data);
-}
-
-function deleteChildren(parent){
-  while(parent.firstChild){
-      parent.removeChild(parent.firstChild);
   }
 }
 
