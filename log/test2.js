@@ -1,1 +1,1 @@
-I can detect if folder is beyond the scope of local and allow global
+I'm test 2!

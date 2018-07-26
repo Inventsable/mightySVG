@@ -8,7 +8,7 @@
   });
 
   csInterface.addEventListener('console', function(evt) {
-    console.log(evt.data);
+    console.log('JSX: ' + evt.data);
   });
 
   csInterface.addEventListener('com.playwrite.answer', function(evt) {
@@ -32,7 +32,7 @@
 
   csInterface.addEventListener('com.mightySVG.result', function(evt) {
     // writeFile(mighty.SVGFullPath, readFile(mighty.SVGPath))
-    copyFile(mighty.SVGFullPath, mighty.SVGPath);
+    // copyFile(mighty.SVGFullPath, mighty.SVGPath);
     mighty.name = evt.data;
     csInterface.evalScript(`verifyFile('${evt.data}')`, function(a){
       newPreview(a, mighty.name);

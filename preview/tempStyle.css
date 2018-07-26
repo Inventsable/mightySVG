@@ -1,4 +1,14 @@
-     .hello {
-        fill: #46a085;
+     .cls-1 {
+        fill: none;
+        stroke: #8e2242;
+      }
+
+      .cls-1, .cls-2 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        fill: #fff;
+        stroke: #000;
       }
     

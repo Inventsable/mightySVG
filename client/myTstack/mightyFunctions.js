@@ -32,9 +32,29 @@ function trimEdges(str, num) {
   return str.substr(num).slice(0, (num * -1));
 }
 
-function strReplace(s, f, r){
-   return s.split(f).join(r);
- }
+
+// strReplace('a b c d', 'd');
+// strReplace('a b c d', 'd', '1 2 3');
+// strReplace('.said./the./mouse./to./the./cur', './', '/', 2)
+// strReplace('./such./a./trial./dear./sir', './', '/', 1)
+function strReplace(s, ...args){
+  if (args.length > 2) {
+    var d = s.split(args[0]);
+    var fixer = [];
+    for (var i = 0; i < d.length; i++) {
+      if (i < args[2]) {
+        fixer.push(d[i] + args[1])
+      } else {
+        fixer.push(d[i] + args[0])
+      };
+    };
+    return fixer.join('');
+  } else if (args.length > 1) {
+    return s.split(args[0]).join(args[1]);
+  } else {
+    return s.split(args[0]).join('');
+  }
+}
 
 function inString(haystack, needle){
   if (haystack.includes(needle)) {
@@ -43,6 +63,8 @@ function inString(haystack, needle){
     return false;
   }
 }
+
+
 
 function containsMultiple(haystack, needle){
   if (haystack.split(needle).length > 2) {
@@ -75,6 +97,14 @@ function isBetween(a, b, c) {
 var contains = function (haystack, needle) {
     return !!~haystack.indexOf(needle);
 };
+
+String.prototype.insert = function (index, string) {
+  if (index > 0)
+    return this.substring(0, index) + string + this.substring(index, this.length);
+  else
+    return string + this;
+};
+
 // // can be used like so now:
 // if (contains(items, 3452)) {
 //     // do something else...
