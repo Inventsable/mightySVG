@@ -38,7 +38,7 @@ const regSVG = {
     r : /r=("|'|`)([^("|'|`)]*)(?="|'|`)/,
   },
   path : {
-    d : /cy=("|'|`)([^("|'|`)]*)(?="|'|`)/,
+    d : /d=("|'|`)([^("|'|`)]*)(?="|'|`)/,
     transform : /transform=("|'|`)([^("|'|`)]*)(?="|'|`)/,
   },
 };
@@ -81,51 +81,6 @@ function getSVGAttributeValue(str, arg) {
   return value;
 }
 
-function getCSSLineByKey(str, arg){
-  var value = false;
-  var regEx = arg + `.*(?=;)`;
-  var reg = new RegExp(regEx, "g");
-  if (reg.test(str)) {
-    value = str.match(reg);
-  }
-  console.log(value[0]);
-  return value[0];
-}
-
-getCSSBySelector(fakeCSS, 'body')
-getCSSBySelector(fakeCSS, '#someId')
-
-function getCSSBySelector(str, arg) {
-  var value = false;
-  var regEx = arg + `\\s{([^}]*)}`;
-  var reg = new RegExp(regEx, "g");
-  if (reg.test(str)){
-    value = str.match(reg);
-    getCSSLineByKey(str, getCSSKeyBySelector(value[0]));
-  }
-  return value[0];
-}
-
-function getCSSValuefromLine(str){
-  console.log(str);
-  var contents = str.match(regCSS.value);
-  // console.log(contents);
-  // contents = trimL(contents[0], 2);
-  // console.log(contents);
-}
-
-function getCSSKeyBySelector(str){
-  var contents = str.match(regCSS.key);
-  return contents[0];
-}
-
-// getValuesOfParentAttributes(testSVG)
-function getValuesOfParentAttributes(str) {
-  var contents = str.match(regSVG.isClass);
-  console.log(contents);
-}
-
-
 // console.log(parseClassListFromId(`id='hello .class .fa-icon'`));
 function parseClassListFromId(str){
   var classList = [];
@@ -142,4 +97,47 @@ function parseClassListFromId(str){
     }
   }
   return classList;
+}
+
+getCSSBySelector(fakeCSS, 'body')
+getCSSBySelector(fakeCSS, '#someId')
+function getCSSBySelector(str, arg) {
+  var value = false;
+  var regEx = arg + `\\s{([^}]*)}`;
+  var reg = new RegExp(regEx, "g");
+  if (reg.test(str)){
+    value = str.match(reg);
+    getCSSLineByKey(str, getCSSKeyBySelector(value[0]));
+  }
+  return value[0];
+}
+
+function getCSSLineByKey(str, arg){
+  var value = false;
+  var regEx = arg + `.*(?=;)`;
+  var reg = new RegExp(regEx, "g");
+  if (reg.test(str)) {
+    value = str.match(reg);
+  }
+  return value[0];
+}
+
+function getCSSKeyBySelector(str){
+  var contents = str.match(regCSS.key);
+  return contents[0];
+}
+
+function getCSSValuefromLine(str){
+  console.log(str);
+  var contents = str.match(regCSS.value);
+  // console.log(contents);
+  // contents = trimL(contents[0], 2);
+  // console.log(contents);
+}
+
+
+// getValuesOfParentAttributes(testSVG)
+function getValuesOfParentAttributes(str) {
+  var contents = str.match(regSVG.isClass);
+  console.log(contents);
 }
