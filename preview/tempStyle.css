@@ -1,14 +1,24 @@
      .cls-1 {
         fill: none;
-        stroke: #8e2242;
       }
 
       .cls-1, .cls-2 {
+        stroke: #8e2242;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
         stroke-miterlimit: 10;
       }
 
-      .cls-2 {
+      .cls-2, .cls-3, .cls-4 {
         fill: #fff;
-        stroke: #000;
+      }
+
+      .cls-3 {
+        stroke: #1100d7;
+      }
+
+      .cls-4 {
+        stroke: #46a0f5;
       }
     

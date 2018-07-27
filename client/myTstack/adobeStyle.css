@@ -80,6 +80,14 @@ body {
   color: var(--colorIcon);
 }
 
+.someClass {
+  color: red;
+}
+
+#someId {
+  color: green;
+}
+
 .adobe-icon-checkBoxOff:before {
   content: "\e900";
   /* color: var(--colorCheckbox); */

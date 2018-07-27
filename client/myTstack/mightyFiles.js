@@ -34,6 +34,16 @@ function smartPath(path) {
   return (isLocalFile(path) ? sysPath + path : path);
 }
 
+function isLocalFile(file){
+  var str = csInterface.getSystemPath(SystemPath.EXTENSION);
+  var parent = str.substring(str.lastIndexOf('/') + 1, str.length);
+  if (!inString(file, parent)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 
 //  DIRECTORY
 //
@@ -224,17 +234,6 @@ function extFolder(){
   var str = csInterface.getSystemPath(SystemPath.EXTENSION);
   var parent = str.substring(str.lastIndexOf('/') + 1, str.length);
   return parent;
-}
-
-
-function isLocalFile(file){
-  var str = csInterface.getSystemPath(SystemPath.EXTENSION);
-  var parent = str.substring(str.lastIndexOf('/') + 1, str.length);
-  if (!inString(file, parent)) {
-    return true;
-  } else {
-    return false;
-  }
 }
 
 
