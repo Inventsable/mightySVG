@@ -3,7 +3,7 @@ function loadJSX(fileName) {
     var csInterface = new CSInterface();
     var extensionRoot = csInterface.getSystemPath(SystemPath.EXTENSION) + "/host/";
     csInterface.evalScript('$.evalFile("' + extensionRoot + fileName + '")');
-		console.log("loading " + extensionRoot + fileName);
+		// console.log("loading " + extensionRoot + fileName);
 }
 
 function loadUniversalJSXLibraries() {
@@ -12,7 +12,7 @@ function loadUniversalJSXLibraries() {
     var extensionRoot = csInterface.getSystemPath(SystemPath.EXTENSION) + "/host/universal/";
     for (var i = 0; i < libs.length; i++) {
       csInterface.evalScript('$.evalFile("' + extensionRoot + libs[i] + '")');
-      console.log("loading " + extensionRoot + libs[i]);
+      // console.log("loading " + extensionRoot + libs[i]);
     }
 }
 

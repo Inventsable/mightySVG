@@ -1,4 +1,5 @@
 :root {
+  /* --framerate: calc(var(--frames)); */
   --ease: cubic-bezier(0.42, 0.00, 0.58, 1.00);
   --easeIn: cubic-bezier(0.42, 0.00, 1.00, 1.00);
   --easeOut: cubic-bezier(0.00, 0.00, 0.58, 1.00);

@@ -1,7 +1,11 @@
 ## mightySVG
 
-Using `dispatchEvent(data, 'com.playwrite.rewrite')` to show with PlayWrite:
+Rebuilding for streamlined file i/o:
 
-![edit](https://thumbs.gfycat.com/ExemplaryGenuineJohndory-size_restricted.gif)
+![filei/o](https://thumbs.gfycat.com/SleepyPerfectHackee-size_restricted.gif)
 
-![drawing](https://thumbs.gfycat.com/PreciousWhirlwindHyrax-size_restricted.gif)
+RegEx engine to scrape from SVG and CSS, creating shadow objects for post-processing code:
+
+![shadowCSS](https://thumbs.gfycat.com/SecondaryHeftyAgama-size_restricted.gif)
+
+![shadowSVG](https://thumbs.gfycat.com/HandyFaithfulBat-size_restricted.gif)

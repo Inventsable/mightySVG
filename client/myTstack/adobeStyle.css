@@ -80,7 +80,7 @@ body {
   color: var(--colorIcon);
 }
 
-.someClass {
+.someClass, .anotherClass, #someObject {
   color: red;
 }
 

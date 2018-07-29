@@ -11,8 +11,8 @@ var newName;
 loadUniversalJSXLibraries();
 loadJSX(`${appName}.jsx`);
 loadJSX(`mightySVG.jsx`);
-console.log(`Loading for ${appName}`);
-console.log(appUI);
+// console.log(`Loading for ${appName}`);
+// console.log(appUI);
 scanningArtboard(true);
 
 var preview = document.getElementById('preview');
@@ -426,7 +426,7 @@ function setPreviewBounds(w, h) {
   var height = (width / ratio);
   document.documentElement.style.setProperty('--prevWidth', width + "px");
   document.documentElement.style.setProperty('--prevHeight', height + "px");
-  console.log("w:" + width + ", h:" + height);
+  // console.log("w:" + width + ", h:" + height);
 }
 
 
@@ -451,7 +451,7 @@ function scanningArtboard(state) {
       if (a !== mighty.AB.data) {
         csInterface.evalScript('artboardName()', function(n){
           mighty.AB.name = n;
-          console.log('Artboard changed to ' + mighty.AB.name);
+          // console.log('Artboard changed to ' + mighty.AB.name);
         })
         csInterface.evalScript(`updateArtboardDimensions(${a});`, function(aa){
           var res = aa.split(',');
@@ -459,13 +459,13 @@ function scanningArtboard(state) {
             here = parm[m];
             mighty.AB.rect[here] = parseInt(res[m]);
           };
-          console.log(mighty.AB);
+          // console.log(mighty.AB);
         });
         setPreviewBounds(mighty.AB.rect.w, mighty.AB.h);
       }
       mighty.AB.data = a;
     })}, 50);
-    console.log("Scanning artboard on");
+    // console.log("Scanning artboard on");
 	} else {
 		clearInterval(timerAB);
 		console.log("Scanning artboard off");

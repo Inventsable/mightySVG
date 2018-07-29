@@ -28,8 +28,15 @@ function trimR(str, num) {
   return str.slice(0, (num * -1));
 }
 
-function trimEdges(str, num) {
-  return str.substr(num).slice(0, (num * -1));
+
+// trimEdges(string, both);
+// trimEdges(string, L, R);
+function trimEdges(str, ...num) {
+  if (num.length > 1) {
+    return str.substr(num[0]).slice(0, (num[1] * -1));
+  } else {
+    return str.substr(num[0]).slice(0, (num[0] * -1));
+  }
 }
 
 
@@ -63,6 +70,8 @@ function inString(haystack, needle){
     return false;
   }
 }
+
+
 
 
 

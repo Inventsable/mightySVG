@@ -8,7 +8,7 @@
   });
 
   csInterface.addEventListener('console', function(evt) {
-    console.log('JSX: ' + evt.data);
+    // console.log('JSX: ' + evt.data);
   });
 
   csInterface.addEventListener('com.playwrite.answer', function(evt) {
