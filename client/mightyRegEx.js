@@ -276,7 +276,7 @@ var shadowSVG = {
     // console.log(renderCode);
   },
 };
-shadowSVG.build(fakeSVG);
+// shadowSVG.build(fakeSVG);
 // shadowSVG.reset();
 // shadowSVG.send();
 

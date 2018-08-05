@@ -1,5 +1,9 @@
 ## mightySVG
 
+Original build and function:
+
+![legacy](https://thumbs.gfycat.com/TightLavishAustraliankelpie-size_restricted.gif)
+
 Rebuilding for streamlined file i/o:
 
 ![filei/o](https://thumbs.gfycat.com/SleepyPerfectHackee-size_restricted.gif)

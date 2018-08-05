@@ -18,11 +18,6 @@ function setDirectory(path){
   setFolder.create();
 }
 
-
-// deleteFolder('C:/Users/PortablePawnShop/AppData/Roaming/Adobe/CEP/extensions/mightySVG./log/temp')
-
-
-
 function deleteFolder(path) {
   var thisFolder = Folder(path);
   try {

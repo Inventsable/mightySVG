@@ -2,7 +2,6 @@
 :root {
   --prevWidth: 50px;
   --prevHeight: 50px;
-  --altOpacity: 0.2;
 }
 
 .adobe-Group {
@@ -24,19 +23,7 @@
   width: 70%;
 }
 
-.previewContainer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1.5px solid var(--colorBorder);
-  padding: 5px 0px;
-  border-radius: 2px;
-}
-
-
-
 .adobe-checkGroup {
-  /* border: 1.5px solid var(--colorBorder); */
   border-top-width: 0px;
   border-bottom-width: 0px;
   border-right-width: 0px;
@@ -46,12 +33,9 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  /* margin-left: .25rem; */
-  /* padding: 0px .25rem; */
 }
 
 .adobe-checkLayer {
-  /* position: absolute; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,29 +49,16 @@
 }
 
 .adobe-checkboxGroup {
-  /* border: 2px solid red; */
   cursor: pointer;
   margin: .5rem .25rem;
   padding: .25rem;
-  /* align-items: baseline; */
-  /* justify-content: space-around; */
 }
 
 .adobe-icon-checkBoxOn, .adobe-icon-checkBoxOff {
   margin-left: .5rem;
 }
 
-/* .checkboxGroup > #convertVariables:hover {
-  color: red;
-} */
 
-#autoInputs {
-  /* border: 2px solid red; */
-  /* display: flex; */
-  justify-content: center;
-  flex-wrap: nowrap;
-  width: 100%;
-}
 
 .adobe-checkToggle {
   margin-left: .25rem;
@@ -128,6 +99,14 @@
   /* background-color: red; */
 }
 
+#autoInputs {
+  /* border: 2px solid red; */
+  /* display: flex; */
+  justify-content: center;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
 
 #preview {
   width: var(--prevWidth);
@@ -138,6 +117,16 @@
   max-width: 120px;
   /* border: 2px solid green; */
   margin: calc(var(--prevWidth) / 10))
+}
+
+
+.previewContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px solid var(--colorBorder);
+  padding: 5px 0px;
+  border-radius: 2px;
 }
 
 #preview svg {

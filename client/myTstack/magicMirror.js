@@ -1,47 +1,7 @@
 var cs = new CSInterface();
 var docExist;
 
-window.onload = init;
-// window.onload = logSkin;
-
-function init(){
-  var appSkin = cs.hostEnvironment.appSkinInfo;
-  logSkin(appSkin);
-  loadBorderWidth();
-  callDoc();
-  cs.addEventListener(CSInterface.THEME_COLOR_CHANGED_EVENT, onAppThemeColorChanged);
-  cs.addEventListener('documentAfterActivate', reset);
-  cs.addEventListener('applicationActive', callDoc);
-  appUI.data.name = cs.hostEnvironment.appName;
-  if (navigator.platform.indexOf('Win') > -1) {
-    appUI.data.os = 'Win';
-  } else if (navigator.platform.indexOf('Mac') > -1) {
-    appUI.data.os = 'Mac';
-  }
-
-  buildUI();
-}
-
-function reset(){
-  // console.log("reload!");
-  location.reload();
-}
-
-function callDoc() {
-  if (cs.hostEnvironment.appName === 'ILST') {
-    cs.evalScript('app.documents[0].name', function(e){
-      appUI.data.doc = e;
-      cs.evalScript('app.documents[0].path', function(i){
-        appUI.data.docPath = i;
-      })
-    })
-  }
-  // console.log(appUI.data);
-}
-
-function updateThemeWithAppSkinInfo() {
-    reColorUI();
-  }
+var checkboxLogic = {};
 
 const appUI = {
   global : {
@@ -76,7 +36,7 @@ const appUI = {
   },
   font: {
     Family: "Adobe Clean",
-    Size: "10px"
+    Size: "10px",
   },
   data : {
     name: cs.hostEnvironment.appName,
@@ -88,10 +48,13 @@ const appUI = {
     panelHeight: window.innerHeight,
     system: cs.getOSInformation('--user-agent'),
     version: cs.hostEnvironment.appVersion,
-    os: "none"
+    os: "none",
   }
 };
 
+function updateThemeWithAppSkinInfo() {
+    reColorUI();
+  }
 
 function reColorUI(){
   for (let [key, value] of Object.entries(appUI)) {
@@ -102,8 +65,170 @@ function reColorUI(){
   }
 }
 
+document.addEventListener("DOMContentLoaded", function(event) {
+    initMagicMirror();
+  });
 
-function buildUI(){
+
+function initMagicMirror(){
+  var appSkin = cs.hostEnvironment.appSkinInfo;
+  logSkin(appSkin);
+  loadBorderWidth();
+  callDoc();
+  cs.addEventListener(CSInterface.THEME_COLOR_CHANGED_EVENT, onAppThemeColorChanged);
+  cs.addEventListener('documentAfterActivate', reset);
+  cs.addEventListener('applicationActive', callDoc);
+  if (navigator.platform.indexOf('Win') > -1) {
+    appUI.data.os = 'Win';
+  } else if (navigator.platform.indexOf('Mac') > -1) {
+    appUI.data.os = 'Mac';
+  }
+
+  buildMagicMirror();
+  // buildUINew();
+  console.log(checkboxLogic);
+  console.log(appUI);
+}
+
+function reset(){
+  // console.log("reload!");
+  location.reload();
+}
+
+function callDoc() {
+  if (cs.hostEnvironment.appName === 'ILST') {
+    cs.evalScript('app.documents[0].name', function(e){
+      appUI.data.doc = e;
+      cs.evalScript('app.documents[0].path', function(i){
+        appUI.data.docPath = i;
+      })
+    })
+  }
+  console.log(appUI.data);
+}
+
+
+
+/*---
+*
+*    CHECKBOX
+*
+---*/
+
+function toggleState(type, parent){
+  var child = parent.children;
+  // for (var e = 0; e < child.length; e++) {
+    if (isCheckbox(child[0])) {
+      for (let [key, value] of Object.entries(checkboxLogic)) {
+        if (value.elt == child[0].parentNode) {
+          // console.log(child[0]);
+          var negative = !value.state;
+          switch(type) {
+            case 'find':
+              // console.log(`This state is ${value.state}`);
+            break;
+            case 'set':
+              value.state = negative;
+              // console.log(`New state is ${value.state}`);
+              toggleCheckbox(value.state, child[0]);
+            break;
+
+            default:
+            console.log('no params');
+            break;
+          }
+          return value.state;
+        }
+      }
+    } else {
+      console.log("Is not a checkbox");
+    }
+  // }
+}
+
+function isCheckbox(elt) {
+  var match = false;
+  if (hasClass(elt, 'adobe-icon-checkBoxOn')) {
+    match = true;
+  } else if (hasClass(elt, 'adobe-icon-checkBoxOff')) {
+    match = true;
+  }
+  return match;
+}
+
+function toggleCheckbox(state, checkbox) {
+  if (state) {
+    switchClass(checkbox, 'adobe-icon-checkBoxOff', 'adobe-icon-checkBoxOn');
+  } else {
+    switchClass(checkbox, 'adobe-icon-checkBoxOn', 'adobe-icon-checkBoxOff');
+  }
+}
+
+
+
+//
+
+
+function buildMagicMirror(){
+  // console.log('building checkboxes...');
+  var checkbox = [].slice.call(document.getElementsByClassName('adobe-checkboxGroup'));
+  checkbox.forEach(function(v,i,a) {
+    // console.log(i);
+    var child = v.children;
+    for (var e = 0; e < child.length; e++) {
+      if (hasClass(child[e], 'adobe-icon-checkBoxOn')) {
+        checkboxLogic[i] = {
+          state : true,
+          elt : v,
+        }
+        // console.log(child[e]);
+      } else if (hasClass(child[e], 'adobe-icon-checkBoxOff')) {
+        checkboxLogic[i] = {
+          state : false,
+          elt : v,
+        }
+        // console.log(child[e]);
+      }
+    }
+
+    v.addEventListener('click', function(e){
+      toggleState('set', v);
+    });
+  });
+
+
+
+  var dropList = [].slice.call(document.getElementsByClassName('adobe-menu'));
+  dropList.forEach(function(v,i,a) {
+    var isHidden = false;
+    console.log('Hello');
+    v.addEventListener('click', function(evt){
+      isHidden = !isHidden;
+      var parent = v.parentNode;
+      var dropMenu = parent.children[1];
+      // if (isHidden) {
+      //   dropMenu.style.display = "none";
+      // } else {
+      //   dropMenu.style.display = "flex";
+      // }
+      console.log(dropMenu);
+    })
+
+  });
+
+
+  // function resetAllFocusBut(selection){
+  //   if (selection !== 'none')
+  //     switchClass(selection, 'inactive', 'active');
+  //   var foci = [].slice.call(document.getElementsByClassName('focus'));
+  //   foci.forEach(function(v,i,a) {
+  //     if (v !== selection) {
+  //       switchClass(v, 'active', 'inactive');
+  //     }
+  //   });
+  // }
+
+  // @ Rebuild this using hasClass() && switchClass()
   var btnToggles = ['switch', 'switch-on', 'switch-off'];
   for (var i = 0; i < btnToggles.length; i++) {
     var toggleBtn = [].slice.call(document.getElementsByClassName('adobe-btn-' + btnToggles[i]));
@@ -138,38 +263,132 @@ function buildUI(){
     }
     if (target !== "none") {addWheelScrollTo(v, target);}
   });
-}
 
-function addWheelScrollTo(v, target) {
-  v.addEventListener("mouseover", function(evtTier){
-    console.log(evtTier);
-  });
-  v.addEventListener("wheel", function(evt){
-    var newNum = target.textContent;
-    if (evt.deltaY < 0) {
-      newNum++;
-    } else {
-      newNum--;
+  var inputs = [].slice.call(document.getElementsByClassName('adobe-input'));
+  inputs.forEach(function(v,i,a) {
+    console.log('Building inputs');
+    v.addEventListener("focus", function(event){
+      v.style.borderColor = appUI.color.Focus;
+    }, false);
+    v.addEventListener("blur", function(event){
+      v.style.borderColor = appUI.color.Border;
+    }, false);
+
+
+    v.addEventListener("keyup", function(event){
+      switch (event.key) {
+        case 'Backspace':
+          if (event.shiftKey) {
+            v.value = '';
+            console.log("deleted");
+          }
+          break;
+        case 'Delete':
+          if (event.shiftKey) {
+            v.value = '';
+            console.log("deleted");
+          }
+          break;
+        }
+    }, true);
+
+    if (hasClass(v, 'adobe-input-num')) {
+        v.addEventListener("mouseover", function(evtTier){
+          console.log(evtTier);
+        });
+        v.addEventListener("wheel", function(evt){
+          var newNum = v.value;
+          var hasDigit = /(\-|\d)*(\.|\d)*(?=(\s|\w*))/;
+          var extType = /[^\d|\s*](\w*)/;
+          var extType = new RegExp('[^\\d|\\s|\\.|\\-*](\\w*)');
+          if (hasDigit.test(newNum)) {
+            var extension = newNum.match(extType, 'g');
+            extension = extension[0];
+            console.log(newNum);
+            // var integer = newNum.match(/(\-|\d)*(\.|\d)*(?=(\s|\w*))/);
+            var integer = newNum.match(/((([^\.]\d|\-)*(\.\d)|\d*))(?=(\d|\s|\w|\.)*(\d|\w|\.)*)/);
+            console.log(integer);
+            var convert = integer[0];
+            console.log(convert);
+            if (/(\d|\-)*\.(\d)*/.test(convert)) {
+              console.log('This is floating:');
+              convert = parseFloat(integer[0]).toFixed(1);
+            } else {
+              convert = parseInt(integer[0]);
+            }
+            console.log(convert);
+            if (evt.deltaY < 0) {
+              console.log("Scrolling up");
+              if (evt.shiftKey) {
+                convert = increment(true, 'shift', convert);
+              } else if (evt.ctrlKey) {
+                convert = increment(true, 'ctrl', convert);
+              } else {
+                convert++;
+              }
+            } else {
+              if (evt.shiftKey) {
+                convert = increment(false, 'shift', convert);
+              } else if (evt.ctrlKey) {
+                convert = increment(false, 'ctrl', convert);
+              } else {
+                convert--;
+              }
+            }
+            console.log(convert);
+            v.value = convert + " " + extension;
+          }
+        }, false)
     }
-    console.log(evt);
-    target.textContent = newNum;
-  }, false)
+  });
 }
 
-  // var scrollCount = 1;
-  //   window.addEventListener('mousewheel', function(e){
-  //
-  //     if(e.wheelDelta<0 && scrollCount<5){
-  //       scrollCount++;
-  //     }
-  //
-  //     else if(e.wheelDelta>0 && scrollCount>1){
-  //       scrollCount--;
-  //     }
-  //     document.querySelector('.number').innerHTML = scrollCount;
-  //   })
+function addScroll(){
+
+}
 
 
+function increment(dir, key, n) {
+  console.log(n);
+  // n = parseInt(n);
+  // console.log(n);
+  switch (key) {
+    case 'shift':
+      if (dir > 0) {
+        return n + 10;
+      } else {
+        return n - 10;
+      }
+      break;
+    case 'ctrl':
+      if (dir > 0) {
+        return n + .1;
+      } else {
+        return n - .1;
+      }
+      break;
+    default:
+    if (dir > 0) {
+      return n + 1;
+    } else {
+      return n - 1;
+    }
+  }
+
+}
+
+function wheelScroll(key, value, increment) {
+  if (key == 'Shift') {
+  }
+}
+
+// function addWheelScrollTo(v, target) {
+// }
+
+
+
+
+// @ Rebuild this using hasClass() && switchClass()
 function toolbarToggle(elt) {
   var btnToggles = ['switch', 'switch-on', 'switch-off'];
   var toolbar = [].slice.call(document.getElementsByClassName('adobe-toolbar'));
@@ -384,32 +603,3 @@ function onAppThemeColorChanged(event) {
     logSkin(skinInfo);
     console.log(`Theme changed to ${appUI.data.theme}`);
 }
-
-
-
-// for (value in appUI.color) {
-//   console.log('--color' + value, appUI.color);
-// }
-
-// $$$ // document.documentElement.style.setProperty('--color' + value, 'red');
-
-// var sheets = [].slice.call(document.styleSheets);
-// sheets.forEach(function(e){
-//   if (e.href.includes('adobeStyle.css')) {
-//     var style = e.cssRules.style;
-//     e.cssRules[1].style.setProperty('--colorPanelBG', 'red');
-//     // console.log(e.cssRules[1].style);
-//     // console.log(e.cssRules.style[0]);
-//
-//     // e.cssRules[1].style.setProperty('--colorPanelBG', '#ff0000')
-//   }
-//
-// })
-
-  // var jsSheet = document.styleSheets[7];
-  // var jsRules = jsSheet.cssRules;
-  // console.log(sheet);
-//   for (var i = 0; i < document.styleSheets.length; i++){
-//
-//   }
-// }
