@@ -1,3 +1,5 @@
+dispatchEvent('mighty.start', extFolder())
+
 var csInterface = new CSInterface();
 var appSkin = csInterface.hostEnvironment.appSkinInfo;
 // var sysPath = csInterface.getSystemPath(SystemPath.EXTENSION);

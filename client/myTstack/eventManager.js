@@ -26,6 +26,10 @@
     }
   });
 
+  csInterface.addEventListener('mighty.rollcall', function(evt) {
+    dispatchEvent('mighty.rollanswer', extFolder())
+  });
+
   csInterface.addEventListener('com.mightySVG.svgReady', function(evt) {
     // updatePreview(evt.data);
   });
