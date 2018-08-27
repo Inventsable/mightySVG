@@ -1,13 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<!-- 1) -->
 <ExtensionManifest ExtensionBundleId="com.mightysvg" ExtensionBundleVersion="1.0.0" Version="7.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <ExtensionList>
-    <!-- 2) -->
     <Extension Id="com.mightysvg.panel" Version="1.0.0" />
   </ExtensionList>
   <ExecutionEnvironment>
     <HostList>
-      <!-- 3) -->
       <Host Name="ILST" Version="[18,99.9]" />
     </HostList>
     <LocaleList>
@@ -18,14 +15,10 @@
     </RequiredRuntimeList>
   </ExecutionEnvironment>
   <DispatchInfoList>
-    <!-- 2) -->
     <Extension Id="com.mightysvg.panel">
       <DispatchInfo>
         <Resources>
-          <!-- 4) -->
           <MainPath>./client/index.html</MainPath>
-          <!-- 5) -->
-          <!-- <ScriptPath>./host/index.jsx</ScriptPath> -->
           <CEFCommandLine />
         </Resources>
         <Lifecycle>
@@ -37,7 +30,6 @@
           <Menu>mightySVG</Menu>
           <Geometry>
             <Size>
-              <!-- 7) -->
               <Height>150</Height>
               <Width>104</Width>
             </Size>
@@ -50,7 +42,10 @@
               <Width>60</Width>
             </MinSize>
           </Geometry>
-          <Icons />
+          <Icons>
+             <Icon Type="Normal">./icons/iconLight.png</Icon>
+             <Icon Type="RollOver">./icons/iconLight.png</Icon>
+          </Icons>
         </UI>
       </DispatchInfo>
     </Extension>
